@@ -56,7 +56,7 @@ function startGame() {
         }
         createCard(card_types[i]);
         createCard(card_types[i]);
-        j += 1;
+        j++;
     }
     // Updates level display
     document.querySelector(".game-stats__level--value").innerHTML = `${curr_lvl+1}`;
@@ -71,6 +71,7 @@ function startGame() {
         card.addEventListener("click", flipCard);
         card.addEventListener("click", advance);
     });
+    startTimer();
 }
 
 function buttonFunc() {
@@ -80,11 +81,15 @@ function buttonFunc() {
 
     if (button.innerHTML === _new) {
         startGame();
-        startTimer();
         button.innerHTML = _end;
     } else if (button.innerHTML === _end) {
+        endGame();
         button.innerHTML = _start;
     } else {
+        // Reset score and level
+        score_num = 0;
+        score.innerHTML = score_num;
+        curr_lvl = 0;
         startGame();
         button.innerHTML = _end;
     }
@@ -101,6 +106,7 @@ function resetBoard() {
     // Remove old gameboard then set new_board to gameboard variable
     body.removeChild(gameboard);
     gameboard = new_board;
+    clearInterval(interval);
     // Resets variables
     [matched_num, time, width] = [0, 60, 100];
 }
