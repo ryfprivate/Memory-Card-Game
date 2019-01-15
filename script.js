@@ -5,6 +5,10 @@ var curr_lvl = 0;
 var flip_status = false;
 var two_flipped = false;
 var card_one, card_two;
+// Timer variables
+var time = 60;
+var width = 100;
+var interval;
 
 // Arrays
 const card_types = [
@@ -19,6 +23,22 @@ var button = document.querySelector(".game-stats__button");
 button.addEventListener("click", buttonFunc);
 
 // Functions
+function startTimer() {
+    let timerbar = document.querySelector(".game-timer__bar");
+    console.log(timerbar.innerHTML);
+    // timerbar.style.width = "50%";
+    // timerbar.innerHTML = "50s";
+    interval = setInterval(function() {
+        time--;
+        timerbar.innerHTML = `${time}s`;
+        width -= (100/60);
+        timerbar.style.width = `${width}%`;
+        if (time === 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+}
+
 function startGame() {
     resetBoard();
     // Create new cards based on current level
@@ -45,6 +65,7 @@ function buttonFunc() {
 
     if (button.innerHTML === _new) {
         startGame();
+        startTimer();
         button.innerHTML = _end;
     } else if (button.innerHTML === _end) {
         button.innerHTML = _start;
