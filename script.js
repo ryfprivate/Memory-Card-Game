@@ -22,6 +22,9 @@ const card_types = [
 const levels = [
     2, 8, 18
 ]
+const struct = [
+    "1fr 1fr", "1fr 1fr 1fr 1fr", "1fr 1fr 1fr 1fr 1fr 1fr"
+]
 
 // Event listeners
 var button = document.querySelector(".game-stats__button");
@@ -91,7 +94,7 @@ function resetBoard() {
     // Create a new gameboard
     let new_board = document.createElement("div");
     new_board.classList.add("game-board")
-    new_board.style.gridTemplateColumns = "1fr 1fr";
+    new_board.style.gridTemplateColumns = struct[curr_lvl];
     // Insert new gameboard before old gameboard
     let body = gameboard.parentNode;
     body.insertBefore(new_board, gameboard);
