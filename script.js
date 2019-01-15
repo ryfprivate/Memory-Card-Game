@@ -5,6 +5,7 @@ var curr_lvl = 0;
 var flip_status = false;
 var two_flipped = false;
 var card_one, card_two;
+var matched_num = 0;
 // Timer variables
 var time = 60;
 var width = 100;
@@ -27,30 +28,37 @@ var button = document.querySelector(".game-stats__button");
 button.addEventListener("click", buttonFunc);
 
 // Functions
-function startTimer() {
-    let timerbar = document.querySelector(".game-timer__bar");
-    interval = setInterval(function() {
-        console.log(time);
-        time--;
-        timerbar.innerHTML = `${time}s`;
-        width -= 1.66;
-        timerbar.style.width = `${width}%`;
-        if (time === 0) {
-            clearInterval(interval);
-            alert(`${end_msg}${score.innerHTML}`);
+function advance() {
+    // Function that checks if the win condition is met
+    if (matched_num === levels[curr_lvl]) {
+        // If all cards have been matched, and it is the last level
+        // End game and print out the score
+        if (curr_lvl === (levels.length-1)) {
+            endGame();
         }
-    }, 1000);
+        // Otherwise, advance to the next level
+        curr_lvl++;
+        startGame();
+    }
 }
-
 function startGame() {
     resetBoard();
     // Create new cards based on current level
-    for (let i = 0; i < levels[curr_lvl]; i++) {
+    var j = 0;
+    for (let i = 0; j < levels[curr_lvl]; i++) {
+        if (i === (card_types.length)) {
+            // If the end of the array has been reached
+            // Re-iterate from the start
+            i = 0;
+        }
         createCard(card_types[i]);
         createCard(card_types[i]);
+        j += 1;
     }
+    // Updates level display
+    document.querySelector(".game-stats__level--value").innerHTML = `${curr_lvl+1}`;
+    // Sets up new card deck
     const all_cards = document.querySelectorAll(".card");
-
     all_cards.forEach((card) => {
         // Shuffles the card order
         let num_cards = all_cards.length
@@ -58,6 +66,7 @@ function startGame() {
         card.style.order = rand_pos;
         // Add click event to each card
         card.addEventListener("click", flipCard);
+        card.addEventListener("click", advance);
     });
 }
 
@@ -89,6 +98,8 @@ function resetBoard() {
     // Remove old gameboard then set new_board to gameboard variable
     body.removeChild(gameboard);
     gameboard = new_board;
+    // Resets variables
+    [matched_num, time, width] = [0, 60, 100];
 }
 
 function createCard(type) {
@@ -145,6 +156,7 @@ function disableCards() {
     card_one.removeEventListener('click', flipCard);
     card_two.removeEventListener('click', flipCard);
     updateScore();
+    matched_num++;
     resetVar();
 }
 
@@ -168,4 +180,22 @@ function resetVar() {
 function updateScore() {
     score_num += time*(curr_lvl+1);
     score.innerHTML = score_num;
+}
+
+function startTimer() {
+    let timerbar = document.querySelector(".game-timer__bar");
+    interval = setInterval(function () {
+        time--;
+        timerbar.innerHTML = `${time}s`;
+        width -= 1.66;
+        timerbar.style.width = `${width}%`;
+        if (time === 0) {
+            endGame();
+        }
+    }, 1000);
+}
+
+function endGame() {
+    clearInterval(interval);
+    alert(`${end_msg}${score.innerHTML}`);
 }
