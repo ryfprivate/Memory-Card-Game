@@ -1,15 +1,39 @@
-// your logic here
+// variables
+var gameboard = document.querySelector(".game-board");
+var curr_lvl = 0;
+
+// arrays
 const card_types = [
     "css3", "html5", "js", "react", "nodejs", "sass", "linkedin", "heroku", "github", "aws"
 ]
-
-for (let i=0; i<2; i++) {
-    createCard(card_types[i]);
-}
+const levels = [
+    2, 8, 18
+]
 
 // Event listeners
 var button = document.querySelector(".game-stats__button");
 button.addEventListener("click", buttonFunc);
+
+function resetBoard() {
+    // Create a new gameboard
+    let new_board = document.createElement("div");
+    new_board.classList.add("game-board")
+    new_board.style.gridTemplateColumns = "1fr 1fr";
+    // Insert new gameboard before old gameboard
+    let body = gameboard.parentNode;
+    body.insertBefore(new_board, gameboard);
+    // Remove old gameboard then set new_board to gameboard variable
+    body.removeChild(gameboard);
+    gameboard = new_board;
+}
+
+function startGame() {
+    resetBoard();
+    for (let i = 0; i < levels[curr_lvl]; i++) {
+        createCard(card_types[i]);
+        createCard(card_types[i]);
+    }
+}
 
 function buttonFunc() {
     let _new = "New Game";
@@ -17,6 +41,7 @@ function buttonFunc() {
     let _start = "Start Game";
 
     if (button.innerHTML===_new) {
+        startGame();
         button.innerHTML = _end;
     } else if (button.innerHTML === _end) {
         button.innerHTML = _start;
@@ -24,8 +49,8 @@ function buttonFunc() {
         button.innerHTML = _end;
     }
 }
+
 function createCard(type) {
-    var gameboard = document.querySelector(".game-board");
     let card = document.createElement("div");
     let card_front = document.createElement("div");
     let card_back = document.createElement("div");
