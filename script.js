@@ -29,6 +29,11 @@ function startGame() {
     const all_cards = document.querySelectorAll(".card");
 
     all_cards.forEach((card) => {
+        // Shuffles the card order
+        let num_cards = all_cards.length
+        let rand_pos = Math.floor(Math.random() * num_cards);
+        card.style.order = rand_pos;
+        // Add click event to each card
         card.addEventListener("click", flipCard);
     });
 }
