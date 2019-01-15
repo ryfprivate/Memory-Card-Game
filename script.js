@@ -9,6 +9,10 @@ var card_one, card_two;
 var time = 60;
 var width = 100;
 var interval;
+// Score variables
+var score = document.querySelector(".game-stats__score--value");
+var end_msg = "Congratulations, your score is ";
+var score_num = 0;
 
 // Arrays
 const card_types = [
@@ -25,16 +29,15 @@ button.addEventListener("click", buttonFunc);
 // Functions
 function startTimer() {
     let timerbar = document.querySelector(".game-timer__bar");
-    console.log(timerbar.innerHTML);
-    // timerbar.style.width = "50%";
-    // timerbar.innerHTML = "50s";
     interval = setInterval(function() {
+        console.log(time);
         time--;
         timerbar.innerHTML = `${time}s`;
-        width -= (100/60);
+        width -= 1.66;
         timerbar.style.width = `${width}%`;
         if (time === 0) {
             clearInterval(interval);
+            alert(`${end_msg}${score.innerHTML}`);
         }
     }, 1000);
 }
@@ -141,6 +144,7 @@ function disableCards() {
     // Removes flip event from both cards
     card_one.removeEventListener('click', flipCard);
     card_two.removeEventListener('click', flipCard);
+    updateScore();
     resetVar();
 }
 
@@ -159,4 +163,9 @@ function resetVar() {
     // Resets all match logic variables
     [flip_status, two_flipped] = [false, false];
     [card_one, card_two] = [null, null];
+}
+
+function updateScore() {
+    score_num += time*(curr_lvl+1);
+    score.innerHTML = score_num;
 }
